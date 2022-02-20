@@ -1,14 +1,14 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
 
@@ -17,8 +17,14 @@ public class UserController {
     }
 
     @GetMapping()
-    public String user(ModelMap modelMap, Principal principal) {
-        modelMap.addAttribute("user", userService.loadUserByUsername(principal.getName()));
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping("/user")
+    public String user(Principal principal, Model model) {
+        User user = (User) userService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", user);
         return "user";
     }
 }
